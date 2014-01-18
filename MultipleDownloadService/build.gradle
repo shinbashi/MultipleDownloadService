@@ -1,0 +1,38 @@
+apply plugin: 'android-library'
+
+android {
+    compileSdkVersion 17
+    buildToolsVersion "18.1.1"
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 19
+        versionCode 1
+        versionName "1.0"
+    }
+    release {
+        runProguard false
+        proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:+'
+}
+
+// プロジェクトルート配下のrepositoryディレクトリにデプロイする
+def repos = new File(rootDir, "repository")
+
+// Mavenプラグインの利用を宣言
+apply plugin: 'maven'
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository url: "file://${repos.absolutePath}" // デプロイ先
+            pom.version = '0.0.1' // ライブラリバージョン
+            pom.groupId = 'net.kujilabo' // グループ名
+            pom.artifactId = 'multiple-download-service' // アーティファクト名
+        }
+    }
+}
